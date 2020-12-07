@@ -13,7 +13,6 @@ Options:
 import json
 import re
 from docopt import docopt
-from pprint import pprint
 
 def convert_log_line(logfile):
     log = open(logfile, 'r') 
