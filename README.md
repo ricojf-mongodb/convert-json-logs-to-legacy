@@ -8,6 +8,8 @@ generate_mplot_logs.py --log mongodb.log > legacy.log
 * CONTROL
   * Only a single CONTROL line to make it work for t2
   * It needs to add pid, port, arch and host
+* ACCESS
+  * To generate authentication entry
 * NETWORK
   * To generate the clients, connstats and connections statistics
 * COMMAND, WRITE and QUERY
