@@ -36,6 +36,8 @@ def convert_log_line(logfile):
                 attr.append('end connection')
             elif obj['msg'] == 'Connection accepted':
                 attr.append('connection accepted')
+            elif obj['msg'] == 'Authentication succeeded':
+                attr.append('Successfully authenticated')
             else:
                 attr.append(obj['msg'])
         if c == 'CONTROL' and 'attr' in obj and 'host' in obj['attr']:
@@ -45,6 +47,15 @@ def convert_log_line(logfile):
             host = obj['attr']['host']
             attr.pop()
             attr.append("pid={} port={} {} host={}".format(pid, port, arch, host))
+        elif c == 'ACCESS':
+            if 'attr' in obj:
+                for key in obj['attr']:
+                    if key == 'principalName':
+                        attr.append('as principal ' + str(obj['attr'][key]))
+                    elif key == 'authenticationDatabase':
+                        attr.append('on ' + obj['attr'][key])
+                    elif key == 'remote':
+                        attr.append('from client '+str(obj['attr'][key]))
         elif c == 'NETWORK':
             if 'attr' in obj:
                 for key in obj['attr']:
