@@ -72,7 +72,7 @@ def convert_log_line(logfile):
                         attr.append(json.dumps(obj['attr'][key]))
                     elif key == 'connectionCount':
                         attr.append('('+str(obj['attr'][key])+ ' connections now open)')
-        elif c == 'COMMAND' or c == 'WRITE' or c == 'QUERY':
+        elif c == 'COMMAND' or c == 'WRITE' or c == 'QUERY' or c == 'TXN':
             if 'attr' in obj:
                 for key in obj['attr']:
                     if key == 'type' or key == 'ns':
