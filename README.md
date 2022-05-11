@@ -12,7 +12,7 @@ generate_mplot_logs.py --log mongodb.log > legacy.log
   * To generate authentication entry
 * NETWORK
   * To generate the clients, connstats and connections statistics
-* COMMAND, WRITE and QUERY
+* COMMAND, WRITE, QUERY and TXN
   * To generate mplotqueries
   * To generate mloginfo --queries
   * To generate mloginfo --clients --connstats --connections
