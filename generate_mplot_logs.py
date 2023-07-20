@@ -77,6 +77,8 @@ def convert_log_line(logfile):
                 for key in obj['attr']:
                     if key == 'type' or key == 'ns':
                         attr.append(obj['attr'][key])
+                    elif key == 'command' and type(obj['attr'][key]) is str:
+                        attr.append(obj['attr'][key])
                     elif key == 'command':
                         command = ''
                         cmd = ''
