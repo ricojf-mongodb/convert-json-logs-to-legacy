@@ -14,6 +14,50 @@ import json
 import re
 from docopt import docopt
 
+def span_list(obj):
+    ctr = 0
+    cmd = ''
+    command = ''
+    for ptr in obj:
+        ctr = ctr + 1
+        if ctr > 1:
+            cmd = cmd + ', '
+        if type(ptr) is dict:
+            cmd = cmd + span_object(ptr)
+        elif type(ptr) is list:
+             cmd = cmd + span_list(ptr)
+        else:
+            cmd = cmd + json.dumps(ptr)
+            # cmd = cmd + json.dumps(obj[ptr])
+    command = '[ ' + cmd + ' ]'
+    return(command)
+
+def span_object(obj):
+    ctr = 0
+    command = ''
+    for ptr in obj:
+        ctr = ctr + 1
+        if ctr > 1:
+            command = command + ', '
+        if type(obj[ptr]) is dict:
+            command= command + ptr + ': ' + span_object(obj[ptr])
+        elif type(obj[ptr]) is list:
+            cmd = ''
+            for item in obj[ptr]:
+                if cmd != '':
+                    cmd = cmd + ', '
+                if type(item) is dict:
+                    cmd = cmd + span_object(item)
+                if type(item) is list:
+                    cmd = cmd + span_list(item)
+                else:
+                    cmd = cmd + json.dumps(item)
+            command = command + ptr + ': [ ' + cmd + ' ]'
+        else:
+            command = command + ptr + ': ' + json.dumps(obj[ptr])
+    command = '{ ' + command + ' }'
+    return(command)
+
 def convert_log_line(logfile):
     log = open(logfile, 'r') 
 
@@ -89,7 +133,12 @@ def convert_log_line(logfile):
                                 command = command + ', '
                             else:
                                 cmd = 'command: ' + key
-                            command = command + key + ': ' + json.dumps(obj['attr']['command'][key])
+                            if type(obj['attr']['command'][key]) is dict:
+                                command = command + key + ': ' + span_object(obj['attr']['command'][key])
+                            elif type(obj['attr']['command'][key]) is list:
+                                command = command + key + ': ' + span_list(obj['attr']['command'][key])
+                            else:
+                                command = command + key + ': ' + json.dumps(obj['attr']['command'][key])
                         command = '{ ' + command + ' }'
                         # cmd = 'command: ' + list(obj['attr']['command'].keys())[0]
                         attr.append(cmd)
@@ -97,7 +146,14 @@ def convert_log_line(logfile):
                     elif key == 'durationMillis':
                         attr.append(str(obj['attr'][key]) + 'ms')
                     else:
-                        attr.append(key + ':' + json.dumps(obj['attr'][key]))
+                        if type(obj['attr'][key]) is dict:
+                            str1 = key + ':' + span_object(obj['attr'][key])
+                            attr.append(str1)
+                        elif key == "planSummary":
+                            attr.append(key + ': ' + obj['attr'][key])
+                        else:
+                            attr.append("{}:{}".format(key,obj['attr'][key]))
+                            # attr.append(key + ':' + json.dumps(obj['attr'][key]))
         else:
             continue
         attrstr = ' '.join(attr)
@@ -106,6 +162,8 @@ def convert_log_line(logfile):
 def main():
     opts = docopt(__doc__)
     logfile = opts['--log']
+    if logfile == None:
+        opts = docopt(__doc__, ['-h'])
     convert_log_line(logfile)
 
 if __name__ == '__main__':
