@@ -42,17 +42,7 @@ def span_object(obj):
         if type(obj[ptr]) is dict:
             command= command + ptr + ': ' + span_object(obj[ptr])
         elif type(obj[ptr]) is list:
-            cmd = ''
-            for item in obj[ptr]:
-                if cmd != '':
-                    cmd = cmd + ', '
-                if type(item) is dict:
-                    cmd = cmd + span_object(item)
-                if type(item) is list:
-                    cmd = cmd + span_list(item)
-                else:
-                    cmd = cmd + json.dumps(item)
-            command = command + ptr + ': [ ' + cmd + ' ]'
+            command= command + ptr + ': ' + span_list(obj[ptr])
         else:
             command = command + ptr + ': ' + json.dumps(obj[ptr])
     command = '{ ' + command + ' }'
