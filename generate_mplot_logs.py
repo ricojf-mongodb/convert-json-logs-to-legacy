@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 """
 generate_mplot_logs.py logfile
 
@@ -61,7 +61,7 @@ def convert_log_line(logfile):
             continue
         c = obj["c"]
         dt = obj['t']['$date']
-        dt = re.sub('(\+\d\d):(\d\d)$',r'\1\2', dt)
+        dt = re.sub(r'(\+\d\d):(\d\d)$',r'\1\2', dt)
         s = obj['s']
         ctx = obj['ctx']
         attr = []
@@ -135,6 +135,9 @@ def convert_log_line(logfile):
                         attr.append(command)
                     elif key == 'durationMillis':
                         attr.append(str(obj['attr'][key]) + 'ms')
+                    ### added to ignore MongoDB 8.0 new attributes
+                    elif key == 'isFromUserConnection' or key == 'collectionType':
+                        continue
                     else:
                         if type(obj['attr'][key]) is dict:
                             str1 = key + ':' + span_object(obj['attr'][key])
