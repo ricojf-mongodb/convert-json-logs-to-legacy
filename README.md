@@ -19,6 +19,7 @@ generate_mplot_logs.py --log mongodb.log > legacy.log
   * To generate mloginfo --queries
   * To generate mloginfo --clients --connstats --connections
   * To generate mplotqueries with bytesRead as yaxis. mplotqueries <log> --yaxis bytesRead
+  * Filter out MongoDB 8.0 attribute isFromUserConnection and collectionType
 
 # Note:
 The converted log can be dragged to t2 to add "Server Log" metrics
